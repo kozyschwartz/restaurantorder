@@ -8,8 +8,8 @@ public class Meal {
 	private int[] menu=new int[15];
 	private ArrayList<Combo> combo=new ArrayList<>();
 	private int totalPrice;
-	Price price=new Price();
-	
+	private Price price=new Price();
+	private Count count=new Count();
 
 	public void printOrderDetail() {
 		System.out.println("\n-----Your order-------------------------");
@@ -20,7 +20,7 @@ public class Meal {
 			switch(w) {
 			case 0->{if(menu[0]>0||menu[1]>0)
 			for(Combo x:combo) {System.out.printf("%2d×%s",x.getQuantity(),x.getClass().getSimpleName());
-			System.out.println(" ".repeat(31-x.getClass().getSimpleName().length())+x.getPrice()+"$");
+			System.out.println(" ".repeat(32-x.getClass().getSimpleName().length())+x.getPrice()+"$");
 			for(String y:x.getComboType()) {
 			if(y==null) {break;}else if(y.equals(x.getComboType()[0])) {System.out.printf("%5d×%s",x.getQuantity(),y+" burger");System.out.printf(" ".repeat(18-y.length()) +"%3d$%n",x.getQuantity()*(y.equals("beef")?15:13));
 			}else {int i;if(price.getFoodList().indexOf(y)>3&&price.getFoodList().indexOf(y)<9) {i=1;}else {i=(int)price.getMenuList().get(price.getFoodList().indexOf(y));};
@@ -56,8 +56,11 @@ public class Meal {
 		case 1,2->combo.get(combo.size()-1).getPrice();
 		default->(int)price.getMenuList().get(mealNum-3)*quantity;
 		};
+		
 	}
-
+	public Count getCount() {
+		return count;
+	}
 	
 	}
 	class Combo{
@@ -109,3 +112,21 @@ public ArrayList getFoodList() {
 	return foodList;
 }
 }
+class Count{
+	private int toppingCount;
+	private int toppingCap;
+	public int getToppingCount() {
+		return toppingCount;
+	}
+	public int getToppingCap() {
+		return toppingCap;
+	}
+	public void setToppingCount(int num) {
+		toppingCount+=num;
+	}
+	public void setToppingCap(int num) {
+		toppingCap+=num;
+	}
+	
+}
+
