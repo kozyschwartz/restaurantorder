@@ -20,11 +20,11 @@ public class Meal {
 			switch(w) {
 			case 0->{if(menu[0]>0||menu[1]>0)
 			for(Combo x:combo) {System.out.printf("%2d×%s",x.getQuantity(),x.getClass().getSimpleName());
-			System.out.println(" ".repeat(32-x.getClass().getSimpleName().length())+x.getPrice()+"$");
+			System.out.printf("%s%5d$%n"," ".repeat(29-x.getClass().getSimpleName().length()),x.getPrice());
 			for(String y:x.getComboType()) {
-			if(y==null) {break;}else if(y.equals(x.getComboType()[0])) {System.out.printf("%5d×%s",x.getQuantity(),y+" burger");System.out.printf(" ".repeat(18-y.length()) +"%3d$%n",x.getQuantity()*(y.equals("beef")?15:13));
+			if(y==null) {break;}else if(y.equals(x.getComboType()[0])) {System.out.printf("%5d×%s",x.getQuantity(),y);System.out.printf(" ".repeat(25-y.length()) +"%3d$%n",x.getQuantity()*(int)price.getMenuList().get(price.getFoodList().indexOf(y)));
 			}else {int i;if(price.getFoodList().indexOf(y)>3&&price.getFoodList().indexOf(y)<9) {i=1;}else {i=(int)price.getMenuList().get(price.getFoodList().indexOf(y));};
-			System.out.printf("%5d×%s",menu[w],y);System.out.printf("%s%3d$%n"," ".repeat(25-y.length()),x.getQuantity()*i);}
+			System.out.printf("%5d×%s",x.getQuantity(),y);System.out.printf("%s%3d$%n"," ".repeat(25-y.length()),x.getQuantity()*i);}
 			}System.out.printf("%5d×combo discount          %4d$%n",x.getQuantity(),-x.getQuantity()*(x.getClass().getSimpleName().equals("Combo")?3:5));}
 			}
 			case 1->System.out.print("");
@@ -43,7 +43,9 @@ public class Meal {
 	public LocalDateTime getTime() {
 		return time;
 	}
-	
+	public int[] getOrderArray() {
+		return menu;
+	}
 	
 	public void setPrice(int mealNum,int quantity,String burgerType,String sideType,String drinkType,String drinkSize,String topping1,String topping2,String topping3) {
 		
@@ -71,9 +73,9 @@ public class Meal {
 			this.quantity=quantity;
 			comboType[0]=burgerType;
 			comboType[1]=sideType;
-			comboType[2]=drinkType+(drinkSize.equals("small")?"":" "+drinkSize);
-			int i=comboType[0].equals("fish")?-2:0;
-			int j=comboType[2].equals("coke")?0:comboType[2].equals("coke large")?3:comboType[2].equals("beer")?5:8;
+			comboType[2]=drinkType+(drinkSize.equals("s")?"":" "+drinkSize);
+			int i=comboType[0].equals("fish burger")?-2:0;
+			int j=comboType[2].equals("coke")?0:comboType[2].equals("coke l")?3:comboType[2].equals("beer")?5:8;
 			price=22+i+j;
 			
 		}
@@ -91,7 +93,7 @@ public class Meal {
 	class Delux extends Combo{
 		public Delux(int quantity,String burgerType,String sideType,String drinkType,String drinkSize,String topping1,String topping2,String topping3) {
 			super(quantity,burgerType,sideType,drinkType,drinkSize);
-			super.comboType[0]="delux "+burgerType+ " burger";
+			super.comboType[0]="delux "+burgerType;
 			super.comboType[3]=topping1;
 			super.comboType[4]=topping2;
 			super.comboType[5]=topping3;
@@ -101,9 +103,9 @@ public class Meal {
 	}
 
 class Price{
-	private ArrayList<String> foodList=new ArrayList();
+	public ArrayList<String> foodList=new ArrayList();
 	private ArrayList<Integer>menuList=new ArrayList<>();
-	public Price(){foodList.add("beef burger");foodList.add("fish burger");foodList.add("delux beef burger");foodList.add("delux fish burger");foodList.add("tomato");foodList.add("cheese");foodList.add("egg");foodList.add("pickle");foodList.add("onion");foodList.add("chips");foodList.add("salad");foodList.add("coke");foodList.add("coke large");foodList.add("beer");foodList.add("beer large");
+	public Price(){foodList.add("beef burger");foodList.add("fish burger");foodList.add("delux beef burger");foodList.add("delux fish burger");foodList.add("tomato");foodList.add("cheese");foodList.add("egg");foodList.add("pickle");foodList.add("onion");foodList.add("chips");foodList.add("salad");foodList.add("coke");foodList.add("coke l");foodList.add("beer");foodList.add("beer l");
 	menuList.add(15);menuList.add(13);menuList.add(20);menuList.add(18);menuList.add(2);menuList.add(3);menuList.add(4);menuList.add(3);menuList.add(3);menuList.add(5);menuList.add(5);menuList.add(5);menuList.add(8);menuList.add(10);menuList.add(13);}
 public ArrayList getMenuList(){
 	return menuList;
