@@ -1,10 +1,11 @@
 package oopMasterChallenge;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Meal {
-	private LocalDateTime time;
+	private String time;
 	private int[] menu=new int[15];
 	private ArrayList<Combo> combo=new ArrayList<>();
 	private int totalPrice;
@@ -37,10 +38,12 @@ public class Meal {
 		System.out.printf("----------------------------------------%nTotal%33d$%n%n",totalPrice);
 	}
 	public void setTime() {
-		time=LocalDateTime.now();
+		DateTimeFormatter dtf1 =
+				DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy "); // ①
+			time=dtf1.format(LocalDateTime.now());
 		
 	}
-	public LocalDateTime getTime() {
+	public String getTime() {
 		return time;
 	}
 	public int[] getOrderArray() {

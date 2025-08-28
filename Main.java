@@ -1,6 +1,7 @@
 package oopMasterChallenge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -41,6 +42,10 @@ public class Main {
 				isFinished = Main2.order(order);
 			}
 			;
+			if(Arrays.stream(order.get(order.size()-1).getOrderArray()).filter(x->x==0).count()==15) {
+				order.remove(order.get(order.size()-1));
+				continue;
+			}
 			System.out.println("Thanks for you order");
 			System.out.println("Order placed at " + order.get(order.size() - 1).getTime() + "\n");
 		}
@@ -56,13 +61,7 @@ class Main2 {
 			return true;
 
 		}
-		int i=0;
-		while(true) {
-			i = Integer.parseInt(isValid("How many would you like?", "123456789"));
-			if(i>0&&i<99) {
-				break;
-			}
-		}
+		int i= isValid("How many would you like?",99);
 		if (scanner.equals("1") || scanner.equals("2")) {
 			String burgerType = isValid("Would you like fish or beef?", "1");
 			String sideType = isValid("Would you like salad or chips?", "0");
@@ -72,29 +71,7 @@ class Main2 {
 			if (scanner.equals("1")) {
 				((Meal) order.get(order.size() - 1)).setPrice(1, i, burgerType, sideType, drinkType, drinkSize, null,
 						null, null);
-				for (int toppingCount = 0; toppingCount < 4; toppingCount++) {
-					String answer = isValid(
-							(toppingCount == 0 ? "Would you like extra topping?(It's not included to the price, input \"y\" or \"n\")"
-									: "Would you like more extra topping?(It's not included to the price, input \"y\" or \"n\")"),
-							"yn");
-					if (answer.equals("n")) {
-						((Meal) order.get(order.size() - 1)).getCount().setToppingCap(i * (3 - toppingCount));
-						break;
-					} else {
-						String topping = isValid(
-								"Choose a topping from tomato,cheese,egg,pickle,or onion as a topping?",
-								"0");
-						int orderNum = switch (topping) {
-						case "tomato" -> 7;
-						case "cheese" -> 8;
-						case "egg" -> 9;
-						case "pickle" -> 10;
-						default -> 11;
-						};
-						((Meal) order.get(order.size() - 1)).setPrice(orderNum, i, null, null, null, null, null, null,
-								null);
-					}
-				}
+				addToppings(order,3,i);
 			} else {
 				String topping1 = isValid("Choose a topping from tomato,cheese,egg,pickle,or onion as a topping?",
 						"0");
@@ -104,29 +81,7 @@ class Main2 {
 						"0");
 				((Meal) order.get(order.size() - 1)).setPrice(2, i, burgerType, sideType, drinkType, drinkSize,
 						topping1, topping2, topping3);
-				for (int toppingCount = 0; toppingCount < 3; toppingCount++) {
-					String answer = isValid(
-							(toppingCount == 0 ? "Would you like extra topping?(It's not included to the price, input \"y\" or \"n\")"
-									: "Would you like more extra topping?(It's not included to the price, input \"y\" or \"n\")"),
-							"yn");
-					if (answer.equals("n")) {
-						((Meal) order.get(order.size() - 1)).getCount().setToppingCap(i * (2 - toppingCount));
-						break;
-					} else {
-						String topping = isValid(
-								"Choose a topping from tomato,cheese,egg,pickle,or onion as a topping?",
-								"0");
-						int orderNum = switch (topping) {
-						case "tomato" -> 7;
-						case "cheese" -> 8;
-						case "egg" -> 9;
-						case "pickle" -> 10;
-						default -> 11;
-						};
-						((Meal) order.get(order.size() - 1)).setPrice(orderNum, i, null, null, null, null, null, null,
-								null);
-					}
-				}
+				addToppings(order,2,i);
 			}
 		} else if (Integer.parseInt(scanner) > 6 && Integer.parseInt(scanner) < 12) {
 			int toppingCap = ((Meal) order.get(order.size() - 1)).getCount().getToppingCap();
@@ -150,54 +105,12 @@ class Main2 {
 			((Meal) order.get(order.size() - 1)).setPrice(Integer.parseInt(scanner), i, null, null, null, null, null,
 					null, null);
 
-			for (int toppingCount = 0; toppingCount < 4; toppingCount++) {
-				String answer = isValid(
-						toppingCount == 0 ? "Would you like extra topping?(It's not included to the price, input \"y\" or \"n\")"
-								: "Would you like more extra topping?(It's not included to the price, input \"y\" or \"n\")",
-						"yn");
-				if (answer.equals("n")) {
-					((Meal) order.get(order.size() - 1)).getCount().setToppingCap(i * (3 - toppingCount));
-					break;
-				} else {
-					String topping = isValid("Choose a topping from tomato,cheese,egg,pickle,or onion as a topping?",
-							"0");
-					int orderNum = switch (topping) {
-					case "tomato" -> 7;
-					case "cheese" -> 8;
-					case "egg" -> 9;
-					case "pickle" -> 10;
-					default -> 11;
-					};
-					((Meal) order.get(order.size() - 1)).setPrice(orderNum, i, null, null, null, null, null, null,
-							null);
-				}
-			}
+			addToppings(order,3,i);
 		} else if (scanner.equals("5") || scanner.equals("6")) {
 			((Meal) order.get(order.size() - 1)).setPrice(Integer.parseInt(scanner), i, null, null, null, null, null,
 					null, null);
 
-			for (int toppingCount = 0; toppingCount < 6; toppingCount++) {
-				String answer = isValid(
-						toppingCount == 0 ? "Would you like extra topping?(It's not included to the price, input \"y\" or \"n\")"
-								: "Would you like more extra topping?(It's not included to the price, input \"y\" or \"n\")",
-						"yesno");
-				if (answer.equals("no")) {
-					((Meal) order.get(order.size() - 1)).getCount().setToppingCap(i * (5 - toppingCount));
-					break;
-				} else {
-					String topping = isValid("Choose a topping from tomato,cheese,egg,pickle,or onion as a topping?",
-							"0");
-					int orderNum = switch (topping) {
-					case "tomato" -> 7;
-					case "cheese" -> 8;
-					case "egg" -> 9;
-					case "pickle" -> 10;
-					default -> 11;
-					};
-					((Meal) order.get(order.size() - 1)).setPrice(orderNum, i, null, null, null, null, null, null,
-							null);
-				}
-			}
+			addToppings(order,5,i);
 
 		}else {
 			((Meal) order.get(order.size() - 1)).setPrice(Integer.parseInt(scanner), i, null, null, null, null, null,
@@ -226,6 +139,47 @@ class Main2 {
 				continue;
 			}
 			return i;
+		}
+	}
+	public static int isValid(String statement, int maxNum) {
+		while (true) {
+			System.out.println(statement);
+			String i = new Scanner(System.in).nextLine();
+			int j;
+			try{j=Integer.parseInt(i);}catch(NumberFormatException k) {
+				j=0;
+			};
+			if (!(j>0&&j<99)) {
+				System.out.println("Invalid input");
+				continue;
+			}
+			
+			return j;
+		}
+	}
+	public static void addToppings(ArrayList order,int maxNum,int quantity) {
+		for (int toppingCount = 0; toppingCount <maxNum; toppingCount++) {
+			String answer = isValid(
+					(toppingCount == 0 ? "Would you like extra topping?(It's not included to the price, input \"y\" or \"n\")"
+							: "Would you like more extra topping?(It's not included to the price, input \"y\" or \"n\")"),
+					"yn");
+			if (answer.equals("n")) {
+				((Meal) order.get(order.size() - 1)).getCount().setToppingCap(quantity * (maxNum - toppingCount));
+				break;
+			} else {
+				String topping = isValid(
+						"Choose a topping from tomato,cheese,egg,pickle,or onion as a topping?",
+						"0");
+				int orderNum = switch (topping) {
+				case "tomato" -> 7;
+				case "cheese" -> 8;
+				case "egg" -> 9;
+				case "pickle" -> 10;
+				default -> 11;
+				};
+				((Meal) order.get(order.size() - 1)).setPrice(orderNum, quantity, null, null, null, null, null, null,
+						null);
+			}
 		}
 	}
 
